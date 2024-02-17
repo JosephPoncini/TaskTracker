@@ -21,13 +21,11 @@ const getlocalStorage = () => {
 
 }
 
-const removeFromLocalStorage = (task) => {
+const removeFromLocalStorage = (index) => {
 
     let tasks = getlocalStorage();
 
-    let namedIndex = tasks.indexOf(task);
-
-    tasks.splice(namedIndex, 1);
+    tasks.splice(index, 1);
 
     localStorage.setItem("Tasks", JSON.stringify(tasks))
 
