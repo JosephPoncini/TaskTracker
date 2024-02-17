@@ -11,6 +11,10 @@ let tasksGoHere = document.getElementById("tasksGoHere");
 let removeTaskBtn = document.getElementById("removeTaskBtn");
 let saveEditsBtn = document.getElementById("saveEditsBtn");
 
+let toDoDiv = document.getElementById("toDoDiv");
+let inProgressDiv = document.getElementById("inProgressDiv");
+let completedDiv = document.getElementById("completedDiv");
+
 //task view elements
 let taskNameDiv = document.getElementById("taskNameDiv");
 let taskDescriptionDiv = document.getElementById("taskDescriptionDiv");
@@ -26,6 +30,9 @@ let editStatus = document.getElementById("editStatus");
 let editDueDateInput = document.getElementById("editDueDateInput");
 
 let key = 0;
+let toDoTracker = 0;
+let inProgressTracker = 0;
+let completedTracker = 0;
 
 class Task {
     constructor(name, description, priority, status, dueDate) {
@@ -40,8 +47,8 @@ class Task {
 let saveTaskBtn = document.getElementById("saveTaskBtn");
 
 
-const addTask = (name, counter) => {
-    tasksGoHere.appendChild(createTaskElement(name, counter));
+const addTask = (name, counter, status, priority) => {
+    tasksGoHere.appendChild(createTaskElement(name, counter, status, priority));
 }
 
 saveTaskBtn.addEventListener("click", () => {
@@ -59,18 +66,50 @@ const loadTasks = () => {
     let tasks = getlocalStorage();
     let counter = 0;
     tasks.forEach(task => {
-        addTask(task.name, counter);
+        addTask(task.name, counter, task.status, task.priority);
         counter++;
     })
+    toDoDiv.innerText  = `${toDoTracker} \t To-Do`
+    inProgressDiv.innerText  = `${toDoTracker} \t In-Progress`
+    completedDiv.innerText  = `${toDoTracker} \t Completed`
 }
 
-const createTaskElement = (taskName, index) => {
+const createTaskElement = (taskName, index, status, priority) => {
     const div = document.createElement("div");
-    div.className = "bg-blue-800 w-full min-h-[100px]";
+
+    switch (status) {
+        case "To-Do":
+            div.className = "bg-blue-800 w-full min-h-[100px]";
+            toDoTracker++;
+            break;
+        case "In-Progress":
+            div.className = "bg-yellow-500 w-full min-h-[100px]";
+            inProgressTracker++;
+            break;
+        case "Completed":
+            div.className = "bg-green-600 w-full min-h-[100px]";
+            completedTracker;
+            break;
+    }
+
 
     const taskDiv = document.createElement("div");
-    taskDiv.className = "p-4";
-    taskDiv.textContent = taskName;
+    switch (priority) {
+        case "Low":
+            taskDiv.className = "p-4";
+            taskDiv.textContent = taskName;
+            break;
+        case "Medium":
+            taskDiv.className = "p-4 font-bold";
+            taskDiv.textContent = taskName;
+            break;
+        case "High":
+            taskDiv.className = "p-4 font-bold underline";
+            console.log(typeof taskName)
+            taskDiv.textContent = `${taskName.toUpperCase()} !!!`;
+            break;
+    }
+
     div.appendChild(taskDiv);
 
     const flexDiv = document.createElement("div");
@@ -122,6 +161,11 @@ saveEditsBtn.addEventListener("click", () => {
     let status = editStatus.value;
     let task = new Task(name, description, priority, status, dueDate);
     saveToLocalStorage(task);
+    location.reload();
+})
+
+removeTaskBtn.addEventListener("click", () => {
+    removeFromLocalStorage(key);
     location.reload();
 })
 
