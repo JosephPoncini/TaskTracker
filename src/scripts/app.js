@@ -70,8 +70,8 @@ const loadTasks = () => {
         counter++;
     })
     toDoDiv.innerText  = `${toDoTracker} \t To-Do`
-    inProgressDiv.innerText  = `${toDoTracker} \t In-Progress`
-    completedDiv.innerText  = `${toDoTracker} \t Completed`
+    inProgressDiv.innerText  = `${inProgressTracker} \t In-Progress`
+    completedDiv.innerText  = `${completedTracker} \t Completed`
 }
 
 const createTaskElement = (taskName, index, status, priority) => {
